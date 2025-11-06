@@ -11,23 +11,28 @@ jobs:
 
       # Install dependencies
       - run:
-          name: Install dependencies
+          name: Install backend dependencies
           command: |
             cd backend
             npm install
 
-      # Run basic tests
+      # Run basic tests (placeholder)
       - run:
           name: Run tests
           command: |
             cd backend
             npm test || echo "No tests configured yet"
 
-      # Run SonarQube Scan (this will be configured later)
+      # Run SonarCloud Scan
       - run:
-          name: SonarQube scan
+          name: SonarCloud scan
           command: |
-            echo "SonarQube scan will run here later"
+            cd backend
+            npx sonar-scanner \
+              -Dsonar.projectKey=T_I_B \
+              -Dsonar.organization=masego911ts \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=$SONAR_TOKEN
 
 workflows:
   version: 2
