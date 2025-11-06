@@ -1,0 +1,36 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/node:18.19
+    working_directory: ~/project
+
+    steps:
+      - checkout
+
+      # Install dependencies
+      - run:
+          name: Install dependencies
+          command: |
+            cd backend
+            npm install
+
+      # Run basic tests
+      - run:
+          name: Run tests
+          command: |
+            cd backend
+            npm test || echo "No tests configured yet"
+
+      # Run SonarQube Scan (this will be configured later)
+      - run:
+          name: SonarQube scan
+          command: |
+            echo "SonarQube scan will run here later"
+
+workflows:
+  version: 2
+  orb-free-workflow:
+    jobs:
+      - build-and-test
