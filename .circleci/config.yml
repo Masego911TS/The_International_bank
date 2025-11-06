@@ -7,23 +7,24 @@ jobs:
     working_directory: ~/project
 
     steps:
+      # 1. Checkout the code
       - checkout
 
-      # Install dependencies
+      # 2. Install backend dependencies
       - run:
           name: Install backend dependencies
           command: |
             cd backend
             npm install
 
-      # Run basic tests (placeholder)
+      # 3. Run basic tests (placeholder)
       - run:
           name: Run tests
           command: |
             cd backend
             npm test || echo "No tests configured yet"
 
-      # Run SonarCloud Scan
+      # 4. Run SonarCloud scan
       - run:
           name: SonarCloud scan
           command: |
