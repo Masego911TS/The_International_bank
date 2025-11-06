@@ -1,17 +1,19 @@
 version: 2.1
 
+orbs:
+  sonarcloud: sonarsource/sonarcloud@1.0.5
+
 jobs:
   build-and-test:
     docker:
       - image: cimg/node:18.19
     working_directory: ~/project
-
     steps:
       - checkout
 
       # Install backend dependencies
       - run:
-          name: Install backend dependencies
+          name: Install dependencies
           command: |
             cd backend
             npm install
@@ -23,22 +25,11 @@ jobs:
             cd backend
             npm test || echo "No tests configured yet"
 
-      # Install SonarScanner globally
-      - run:
-          name: Install SonarScanner
-          command: |
-            npm install -g sonar-scanner
-
-      # Run SonarCloud Scan
-      - run:
-          name: SonarCloud scan
-          command: |
-            cd backend
-            sonar-scanner \
-              -Dsonar.projectKey=T_I_B \
-              -Dsonar.organization=masego911ts \
-              -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.login=$SONAR_TOKEN
+      # Run SonarCloud scan
+      - sonarcloud/scan:
+          organization: "masego911ts"
+          projectKey: "T_I_B"
+          login: $SONAR_TOKEN
 
 workflows:
   version: 2
