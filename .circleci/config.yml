@@ -7,29 +7,33 @@ jobs:
     working_directory: ~/project
 
     steps:
-      # 1. Checkout the code
       - checkout
 
-      # 2. Install backend dependencies
+      # Install backend dependencies
       - run:
           name: Install backend dependencies
           command: |
             cd backend
             npm install
 
-      # 3. Run basic tests (placeholder)
+      # Run basic tests (placeholder)
       - run:
           name: Run tests
           command: |
             cd backend
             npm test || echo "No tests configured yet"
 
-      # 4. Run SonarCloud scan
+      # Install SonarScanner globally
+      - run:
+          name: Install SonarScanner globally
+          command: npm install -g sonar-scanner
+
+      # Run SonarCloud Scan
       - run:
           name: SonarCloud scan
           command: |
             cd backend
-            npx sonar-scanner \
+            sonar-scanner \
               -Dsonar.projectKey=T_I_B \
               -Dsonar.organization=masego911ts \
               -Dsonar.host.url=https://sonarcloud.io \
