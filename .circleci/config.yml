@@ -9,12 +9,28 @@ jobs:
     steps:
       - checkout
 
+      # Install Java (required for SonarScanner)
+      - run:
+          name: Install Java
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y openjdk-17-jre
+
       # Install backend dependencies
       - run:
           name: Install backend dependencies
           command: |
             cd backend
             npm install
+
+      # Fix SonarScanner permissions
+      - run:
+          name: Fix SonarScanner permissions
+          command: |
+            if [ -d "backend/node_modules/sonar-scanner" ]; then
+              chmod +x backend/node_modules/sonar-scanner/bin/sonar-scanner
+              chmod +x backend/node_modules/sonar-scanner/bin/sonar-scanner-*
+            fi
 
       # Run basic tests (placeholder)
       - run:
@@ -23,18 +39,12 @@ jobs:
             cd backend
             npm test || echo "No tests configured yet"
 
-      # Install SonarScanner globally
-      - run:
-          name: Install SonarScanner
-          command: |
-            npm install -g sonar-scanner
-
       # Run SonarCloud Scan
       - run:
           name: SonarCloud scan
           command: |
             cd backend
-            sonar-scanner \
+            npx sonar-scanner \
               -Dsonar.projectKey=T_I_B \
               -Dsonar.organization=masego911ts \
               -Dsonar.host.url=https://sonarcloud.io \
